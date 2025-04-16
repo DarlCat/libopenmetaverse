@@ -139,6 +139,8 @@ namespace OpenMetaverse
         public bool ReadCritical;
         /// <summary>Status of the last application run sent to the grid login server for statistical purposes</summary>
         public LastExecStatus LastExecEvent = LastExecStatus.Normal;
+        /// <summary>Optional bitfield to provide to the login service</summary>
+        public int agent_flags;
 
         /// <summary>An array of string sent to the login server to enable various options</summary>
         public string[] Options;
@@ -181,6 +183,7 @@ namespace OpenMetaverse
             this.AgreeToTos = true;
             this.ReadCritical = true;
             this.LastExecEvent = LastExecStatus.Normal;
+            this.agent_flags = 0;
         }
 
         /// <summary>
@@ -1137,6 +1140,8 @@ namespace OpenMetaverse
                 loginLLSD["viewer_digest"] = OSD.FromString(loginParams.ViewerDigest);
                 loginLLSD["id0"] = OSD.FromString(loginParams.ID0);
                 loginLLSD["last_exec_event"] = OSD.FromInteger((int)loginParams.LastExecEvent);
+                if (loginParams.agent_flags != 0)
+                    loginLLSD["agent_flags"] = OSD.FromInteger(loginParams.agent_flags);
 
                 // Create the options LLSD array
                 OSDArray optionsOSD = new OSDArray();
@@ -1198,6 +1203,8 @@ namespace OpenMetaverse
                     loginXmlRpc["read_critical"] = "true";
                 loginXmlRpc["id0"] = loginParams.ID0;
                 loginXmlRpc["last_exec_event"] = (int)loginParams.LastExecEvent;
+                if (loginParams.agent_flags != 0)
+                    loginXmlRpc["agent_flags"] = loginParams.agent_flags;
 
                 // Create the options array
                 ArrayList options = new ArrayList();
